@@ -15,6 +15,9 @@ fetch(`https://www.deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`)
         console.log(`error ${err}`)
     });
 
+    let player1Score = 0;
+    let player2Score = 0;
+
 function drawTwo() {
     const url = `https://www.deckofcardsapi.com/api/deck/${deckId}/draw/?count=2`
     fetch(url)
@@ -26,14 +29,48 @@ function drawTwo() {
             let player1Value = convertToNum(data.cards[0].value)
             let player2Value = convertToNum(data.cards[1].value)
 
+
+
             if (player1Value > player2Value) {
-                document.querySelector('h3').innerText = "Player 1 Wins"
+                player1Score += Number(player1Value)
+                player2Score += Number(player2Value)
+                console.log(player1Score)
+                console.log(player2Score)
+                document.querySelector('#player1Score').value = player1Score
+                document.querySelector('#player2Score').value = player2Score
+                document.querySelector('#cardsRemaining').value = data.remaining
+
+
             } else if (player1Value < player2Value) {
-                document.querySelector('h3').innerText = "Player 2 Wins"
+                player1Score += Number(player1Value)
+                player2Score += Number(player2Value)
+                console.log(player1Score)
+                console.log(player2Score)
+                document.querySelector('#player1Score').value = player1Score
+                document.querySelector('#player2Score').value = player2Score
+                document.querySelector('#cardsRemaining').value = data.remaining
+
+
             } else {
-                document.querySelector('h3').innerText = "TIME FOR WAR!"
+                player1Score += Number(player1Value)
+                player2Score += Number(player2Value)
+                console.log(player1Score)
+                console.log(player2Score)
+                document.querySelector('#player1Score').value = player1Score
+                document.querySelector('#player2Score').value = player2Score
+                document.querySelector('#cardsRemaining').value = data.remaining
             }
 
+
+            if (data.remaining === 0 && player1Score > player2Score) {
+                document.querySelector('h3').innerText = "Player 1 Wins!"
+            } else if (data.remaining === 0 && player1Score < player2Score) {
+                document.querySelector('h3').innerText = "Player 2 Wins!"
+            } else if (data.remaining === 0 && player1Score === player2Score) {
+                document.querySelector('h3').innerText = "Tied Game!"
+
+            }
+            
     })
 
     .catch(err => {
@@ -54,3 +91,5 @@ function convertToNum(val) {
         return val
     }
 }
+
+
